@@ -3,11 +3,16 @@ import { UserService, StatusCode } from "../services/index.js";
 //create user
 const createUser = async (req, res) => {
   try {
-    const userData = req.body;
+    let userData = req.body;
+
+    if (req.files.profile_photo && req.files.profile_photo.length === 1) {
+      userData = { ...userData, profilePhoto: req.files.profile_photo };
+    }
 
     const existingUser = await UserService.getUserByEmail(userData.email);
+
     if (!existingUser) {
-      const data = await UserService.createUser(userData);
+      const data = await UserService.createUser(res, userData);
 
       const message = "User created successfully.";
       return StatusCode.sendCreateResponse(res, message, data);
@@ -27,6 +32,7 @@ const loginUser = async (req, res) => {
 
   try {
     const { user, token } = await UserService.loginUser(res, email, password);
+    console.log("🚀 ~ loginUser ~ token:", token);
 
     const message = "User logged-in successfully.";
     return StatusCode.sendSuccessResponse(res, message, user, token);
@@ -52,7 +58,12 @@ const getUser = async (req, res) => {
 //update user
 const updateUser = async (req, res) => {
   try {
-    const data = await UserService.getUserById(req.user.id, req.body);
+    let userData = req.body;
+
+    if (req.files.profile_photo && req.files.profile_photo.length === 1) {
+      userData = { ...userData, profilePhoto: req.files.profile_photo };
+    }
+    const data = await UserService.updateUser(res, req.user.id, userData);
 
     const message = "User updated successfully.";
     return StatusCode.sendSuccessResponse(res, message, data);
@@ -80,9 +91,13 @@ const getUserDetails = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
-    const search = req.query.search || '';
+    const search = req.query.search || "";
 
-    const { users, totalUsers } = await UserService.getUserDetails(page, limit, search);
+    const { users, totalUsers } = await UserService.getUserDetails(
+      page,
+      limit,
+      search
+    );
 
     const data = {
       users,

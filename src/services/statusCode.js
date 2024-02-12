@@ -15,7 +15,7 @@ export const sendSuccessResponse = (res, message, data, token) => {
   }
   return res
     .status(httpStatus.OK)
-    .json({ status: httpStatus.OK, message, data });
+    .json({ status: httpStatus.OK, message, response });
 };
 
 // status(400).

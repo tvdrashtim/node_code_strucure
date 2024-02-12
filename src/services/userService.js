@@ -1,13 +1,25 @@
-import User from "../models/userModel.js";
+import { User } from "../models/index.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { StatusCode } from "../services/index.js";
+import { ProfileImage } from "../utils/upload.js";
 
 //create user
-const createUser = async (userData) => {
+const createUser = async (res, userData) => {
   try {
     const hashedPassword = await bcrypt.hash(userData.password, 10);
-    const user = new User({ ...userData, password: hashedPassword });
+
+    const profilePhotoResult = await ProfileImage(
+      res,
+      userData.profilePhoto,
+      "profile_photo"
+    );
+
+    const user = new User({
+      ...userData,
+      password: hashedPassword,
+      profile_photo: profilePhotoResult,
+    });
     const savedUser = await user.save();
 
     // Generate JWT token
@@ -64,8 +76,28 @@ const loginUser = async (res, email, password) => {
 };
 
 //update user
-const updateUser = async (userId, updatedData) => {
+const updateUser = async (res, userId, userData) => {
   try {
+    let hashedPassword;
+    if (userData.password) {
+      hashedPassword = await bcrypt.hash(userData.password, 10);
+    }
+
+    let profile_photo;
+    if (userData.profilePhoto) {
+      profile_photo = await ProfileImage(
+        res,
+        userData.profilePhoto,
+        "profile_photo"
+      );
+    }
+
+    const updatedData = {
+      ...userData,
+      password: hashedPassword,
+      profile_photo: profile_photo,
+    };
+
     const updatedUser = await User.findByIdAndUpdate(userId, updatedData, {
       new: true,
     });
