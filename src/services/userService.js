@@ -1,4 +1,4 @@
-import { User } from "../models/index.js";
+import { DepartmentUsers, OrganizationUsers, User } from "../models/index.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { StatusCode } from "../services/index.js";
@@ -151,6 +151,44 @@ const getUserDetails = async (page, limit, search) => {
   }
 };
 
+//get user with organization & department details
+const getUserWithOrganizations = async (res, userId) => {
+  try {
+    const organizationUser = await OrganizationUsers.find({
+      user_id: userId,
+    }).populate({
+      path: "organization_id",
+      model: "organizations",
+      select: "_id organization_name strength departments created_at",
+    });
+
+    const departmentUser = await DepartmentUsers.find({
+      user_id: userId,
+    }).populate({
+      path: "department_id",
+      model: "departments",
+      select: "_id department_name strength created_at",
+    });
+
+    if (!organizationUser || !departmentUser) {
+      return null;
+    }
+    const user = await User.findById(userId);
+
+    return {
+      user_id: user._id,
+      first_name: user?.first_name,
+      last_name: user?.last_name,
+      email: user?.email,
+      organization: organizationUser,
+      department: departmentUser,
+    };
+  } catch (error) {
+    const message = error.message;
+    return StatusCode.sendBadRequestResponse(res, message);
+  }
+};
+
 export const UserService = {
   createUser,
   loginUser,
@@ -158,4 +196,5 @@ export const UserService = {
   updateUser,
   deleteUser,
   getUserDetails,
+  getUserWithOrganizations,
 };

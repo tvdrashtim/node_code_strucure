@@ -25,6 +25,7 @@ router
     UserController.updateUser
   )
   .delete(`/:id`, UserController.deleteUser)
-  .get("/details", UserController.getUserDetails);
+  .get("/details", UserController.getUserDetails)
+  .get("/:id/organization", UserController.getUserWithOrganizations);
 
 export default router;

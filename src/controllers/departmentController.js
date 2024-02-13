@@ -35,7 +35,48 @@ const getDepartmentById = async (req, res) => {
     const data = await DepartmentService.getDepartmentById(res, department_id);
 
     const message = "Department retrieved successfully.";
-    return StatusCode.sendCreateResponse(res, message, data);
+    return StatusCode.sendSuccessResponse(res, message, data);
+  } catch (error) {
+    const message = error.message;
+    return StatusCode.InternalErrorResponse(res, message);
+  }
+};
+
+//create department user
+const createDepartmentUser = async (req, res) => {
+  try {
+    let departmentData = req.body;
+
+    const existingDepartmentUser = await DepartmentService.getDepartmentUser(
+      res,
+      departmentData
+    );
+
+    if (!existingDepartmentUser) {
+      const data = await DepartmentService.createDepartmentUser(
+        res,
+        departmentData
+      );
+
+      const message = "Department user created successfully.";
+      return StatusCode.sendCreateResponse(res, message, data);
+    } else {
+      const message = "Department user already exists.";
+      return StatusCode.sendBadRequestResponse(res, message);
+    }
+  } catch (error) {
+    const message = error.message;
+    return StatusCode.InternalErrorResponse(res, message);
+  }
+};
+
+//get department users
+const getDepartmentUsers = async (req, res) => {
+  try {
+    const data = await DepartmentService.getDepartmentUsers(res);
+
+    const message = "Department retrieved successfully.";
+    return StatusCode.sendSuccessResponse(res, message, data);
   } catch (error) {
     const message = error.message;
     return StatusCode.InternalErrorResponse(res, message);
@@ -45,4 +86,6 @@ const getDepartmentById = async (req, res) => {
 export const DepartmentController = {
   createDepartment,
   getDepartmentById,
+  createDepartmentUser,
+  getDepartmentUsers,
 };

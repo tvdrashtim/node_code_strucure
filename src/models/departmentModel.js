@@ -18,6 +18,25 @@ const DepartmentSchema = new Schema({
   },
 });
 
-const Department = mongoose.model("departments", DepartmentSchema);
+const DepartmentUserSchema = new Schema({
+  department_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "organizations",
+    required: true,
+  },
+  user_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users",
+    required: true,
+  },
+  created_at: {
+    type: Date,
+    default: Date.now,
+  },
+});
 
-export default Department;
+export const Department = mongoose.model("departments", DepartmentSchema);
+export const DepartmentUsers = mongoose.model(
+  "department_users",
+  DepartmentUserSchema
+);

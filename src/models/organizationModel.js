@@ -14,7 +14,7 @@ const OrganizationSchema = new Schema({
   departments: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Department",
+      ref: "departments",
       default: null,
     },
   ],
@@ -24,6 +24,25 @@ const OrganizationSchema = new Schema({
   },
 });
 
-const Organization = mongoose.model("organizations", OrganizationSchema);
+const OrganizationUserSchema = new Schema({
+  user_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users",
+    required: true,
+  },
+  organization_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "organizations",
+    required: true,
+  },
+  created_at: {
+    type: Date,
+    default: Date.now,
+  },
+});
 
-export default Organization;
+export const Organization = mongoose.model("organizations", OrganizationSchema);
+export const OrganizationUsers = mongoose.model(
+  "organization_users",
+  OrganizationUserSchema
+);

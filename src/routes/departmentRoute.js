@@ -8,9 +8,15 @@ const router = express.Router();
 router
   .post(
     "/",
-    validate(departmentValidation.createdepartment),
+    validate(departmentValidation.createDepartment),
     DepartmentController.createDepartment
   )
-  .get(`/:id`, DepartmentController.getDepartmentById);
+  .get(`/:id`, DepartmentController.getDepartmentById)
+  .post(
+    "/user",
+    validate(departmentValidation.createDepartmentUser),
+    DepartmentController.createDepartmentUser
+  )
+  .get("/", DepartmentController.getDepartmentUsers);
 
 export default router;

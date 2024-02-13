@@ -1,3 +1,3 @@
 export { default as User } from "./userModel.js";
-export { default as Organization } from "./organizationModel.js";
-export { default as Department } from "./departmentModel.js";
+export { Organization, OrganizationUsers } from "./organizationModel.js";
+export { Department, DepartmentUsers } from "./departmentModel.js";

@@ -11,6 +11,17 @@ router
     validate(organizationValidation.createOrganization),
     OrganizationController.createOrganization
   )
-  .get(`/:id`, OrganizationController.getOrganizationById);
+  .get(`/:id`, OrganizationController.getOrganizationById)
+  .patch(
+    `/:id`,
+    validate(organizationValidation.updateOrganization),
+    OrganizationController.updateOrganizationById
+  )
+  .post(
+    "/user",
+    validate(organizationValidation.createOrganizationUser),
+    OrganizationController.createOrganizationUser
+  )
+  .get("/", OrganizationController.getOrganizationUsers);
 
 export default router;

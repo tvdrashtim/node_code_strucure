@@ -32,7 +32,6 @@ const loginUser = async (req, res) => {
 
   try {
     const { user, token } = await UserService.loginUser(res, email, password);
-    console.log("🚀 ~ loginUser ~ token:", token);
 
     const message = "User logged-in successfully.";
     return StatusCode.sendSuccessResponse(res, message, user, token);
@@ -112,6 +111,20 @@ const getUserDetails = async (req, res) => {
   }
 };
 
+//get user with organization & department details
+const getUserWithOrganizations = async (req, res) => {
+  try {
+    const user_id = req.params.id;
+    const data = await UserService.getUserWithOrganizations(res, user_id);
+
+    const message = "User details retrieved successfully.";
+    return StatusCode.sendSuccessResponse(res, message, data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 export const UserController = {
   createUser,
   loginUser,
@@ -119,4 +132,5 @@ export const UserController = {
   updateUser,
   deleteUser,
   getUserDetails,
+  getUserWithOrganizations,
 };

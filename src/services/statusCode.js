@@ -9,13 +9,11 @@ export const sendCreateResponse = (res, message, data) => {
 
 // status(200).
 export const sendSuccessResponse = (res, message, data, token) => {
-  const response = { success: true, message, data };
+  const response = { status: httpStatus.OK, message, data };
   if (token) {
     response.token = token;
   }
-  return res
-    .status(httpStatus.OK)
-    .json({ status: httpStatus.OK, message, response });
+  return res.status(httpStatus.OK).json(response);
 };
 
 // status(400).
