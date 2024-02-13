@@ -1,6 +1,6 @@
-# Node.js Demo Project
+# Node.js Demo Structure
 
-This is a simple Node.js demo project using Express with ES6 syntax.
+This is a simple Node.js demo structure project using Express with ES6 syntax.
 
 ## Getting Started
 

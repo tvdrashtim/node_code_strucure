@@ -1,5 +1,5 @@
 import Joi from "joi";
-import Pick from "./pick.js";
+import Pick from "../utils/pick.js";
 import { StatusCode } from "../services/index.js";
 
 const validate = (schema) => (req, res, next) => {
