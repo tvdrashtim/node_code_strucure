@@ -10,7 +10,16 @@ export const createUser = {
     last_name: Joi.string().required(),
     password: Joi.string().required().custom(Password),
     email: Joi.string().required().custom(EmailId),
-    phone_number: Joi.string().custom((value, helpers) => {
+    country_code: Joi.string()
+      .allow("")
+      .custom((value, helpers) => {
+        if (value === "" || /^\+\d{1,4}$/.test(value)) {
+          return value;
+        } else {
+          return helpers.message("Please enter a valid country code");
+        }
+      }),
+    phone_number: Joi.custom((value, helpers) => {
       if (
         value === "" ||
         (value.length >= 10 && /^\d{10}$/.test(value.slice(value.length - 10)))
@@ -36,6 +45,15 @@ export const updateUser = {
     last_name: Joi.string(),
     password: Joi.string().custom(Password),
     email: Joi.string().custom(EmailId),
+    country_code: Joi.string()
+      .allow("")
+      .custom((value, helpers) => {
+        if (value === "" || /^\+\d{1,4}$/.test(value)) {
+          return value;
+        } else {
+          return helpers.message("Please enter a valid country code");
+        }
+      }),
     phone_number: Joi.custom((value, helpers) => {
       if (
         value === "" ||

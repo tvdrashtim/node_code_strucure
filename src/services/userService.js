@@ -9,16 +9,19 @@ const createUser = async (res, userData) => {
   try {
     const hashedPassword = await bcrypt.hash(userData.password, 10);
 
-    const profilePhotoResult = await ProfileImage(
-      res,
-      userData.profilePhoto,
-      "profile_photo"
-    );
+    let profile_photo;
+    if (userData.profilePhoto) {
+      profile_photo = await ProfileImage(
+        res,
+        userData.profilePhoto,
+        "profile_photo"
+      );
+    }
 
     const user = new User({
       ...userData,
       password: hashedPassword,
-      profile_photo: profilePhotoResult,
+      profile_photo: profile_photo,
     });
     const savedUser = await user.save();
 
@@ -27,7 +30,7 @@ const createUser = async (res, userData) => {
 
     return { user: savedUser, token };
   } catch (error) {
-    const message = "Error creating user";
+    const message = error.message;
     return StatusCode.InternalErrorResponse(res, message);
   }
 };

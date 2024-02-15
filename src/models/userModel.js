@@ -23,10 +23,16 @@ const UserSchema = new Schema({
     type: String,
     default: null,
   },
+  country_code: {
+    type: String,
+    default: null,
+    required: function () {
+      return this.phone_number;
+    },
+  },
   phone_number: {
     type: String,
-    default: "",
-    required: true,
+    default: null,
   },
   created_at: {
     type: Date,
