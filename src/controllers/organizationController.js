@@ -37,7 +37,7 @@ const getOrganizationById = async (req, res) => {
       organization_id
     );
 
-    const message = "OrganisendCreateResponsezation retrieved successfully.";
+    const message = "Organization retrieved successfully.";
     return StatusCode.sendSuccessResponse(res, message, data);
   } catch (error) {
     const message = error.message;

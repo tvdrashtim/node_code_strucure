@@ -47,7 +47,7 @@ const generateToken = (userData) => {
 };
 
 //get user by email
-const getUserByEmail = async (email) => {
+const getUserByEmail = async (res, email) => {
   try {
     const user = await User.findOne({ email });
     return user;
@@ -113,7 +113,7 @@ const updateUser = async (res, userId, userData) => {
 };
 
 //delete user
-const deleteUser = async (userId) => {
+const deleteUser = async (res, userId) => {
   try {
     const deletedUser = await User.findByIdAndDelete(userId, { new: true });
     if (!deletedUser) {
@@ -128,7 +128,7 @@ const deleteUser = async (userId) => {
 };
 
 //get user details with pagination and search
-const getUserDetails = async (page, limit, search) => {
+const getUserDetails = async (page, limit, search, res) => {
   try {
     const query = {
       $or: [

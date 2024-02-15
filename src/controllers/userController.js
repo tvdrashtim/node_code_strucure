@@ -9,7 +9,7 @@ const createUser = async (req, res) => {
       userData = { ...userData, profilePhoto: req.files.profile_photo };
     }
 
-    const existingUser = await UserService.getUserByEmail(userData.email);
+    const existingUser = await UserService.getUserByEmail(res, userData.email);
 
     if (!existingUser) {
       const data = await UserService.createUser(res, userData);
@@ -44,7 +44,7 @@ const loginUser = async (req, res) => {
 //get login user
 const getUser = async (req, res) => {
   try {
-    const data = await UserService.getUserByEmail(req.user.email);
+    const data = await UserService.getUserByEmail(res, req.user.email);
 
     const message = "User data retrieved successfully.";
     return StatusCode.sendSuccessResponse(res, message, data);
@@ -75,7 +75,7 @@ const updateUser = async (req, res) => {
 //delete user
 const deleteUser = async (req, res) => {
   try {
-    const data = await UserService.deleteUser(req.params.id);
+    const data = await UserService.deleteUser(res, req.params.id);
 
     const message = "User deleted successfully.";
     return StatusCode.sendSuccessResponse(res, message, data);
@@ -95,7 +95,8 @@ const getUserDetails = async (req, res) => {
     const { users, totalUsers } = await UserService.getUserDetails(
       page,
       limit,
-      search
+      search,
+      res
     );
 
     const data = {
